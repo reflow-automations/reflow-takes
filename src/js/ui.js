@@ -574,6 +574,25 @@
   }
 
   /** Bring the setup panel, its note and the Record button in line with what is chosen and what is happening. */
+  function cameraSizeLabel(percent) {
+    return percent < 18 ? 'Small' : percent < 29 ? 'Medium' : percent < 41 ? 'Large' : 'Extra large';
+  }
+
+  function renderCameraExample() {
+    var example = byId('tk-example-camera');
+    if (!example) return;
+    var setup = readSetup();
+    var box = Takes.compositor.bubbleBox(640,360,setup.corner,360*setup.scale,setup.shape);
+    example.style.left = box.x/640*100 + '%'; example.style.top = box.y/360*100 + '%';
+    example.style.width = (box.w || box.d)/640*100 + '%'; example.style.height = (box.h || box.d)/360*100 + '%';
+    example.style.borderRadius = setup.shape === 'rectangle' ? '8px' : '50%';
+    example.style.borderColor = setup.color;
+    el.bubbleSize.setAttribute('aria-valuetext',cameraSizeLabel(Number(el.bubbleSize.value)) + ', ' + el.bubbleSize.value + ' percent of image height');
+    byId('tk-camera-example-note').textContent = starting || recState !== 'idle'
+      ? 'Size on an example screen. The live preview shows your actual recording.'
+      : 'Size on an example screen. Move the slider to see the difference. Your camera is not on yet.';
+  }
+
   function syncSetup() {
     var s = readSetup();
     var busy = starting || recState !== 'idle';
@@ -584,7 +603,8 @@
     setHidden(el.cameraField, !s.camera || s.bubbleFromFile); // a video file needs no camera
     setHidden(el.micField, !s.mic);
     setHidden(el.corners, !(s.screen && s.camera));
-    el.bubbleSizeValue.textContent = el.bubbleSize.value + '%';
+    el.bubbleSizeValue.textContent = cameraSizeLabel(Number(el.bubbleSize.value));
+    renderCameraExample();
     setHidden(el.bubbleColorField, !(s.screen && s.camera));
     setHidden(el.bubbleShape, !(s.screen && s.camera)); // the shape matters exactly when the corner does
 
@@ -695,7 +715,7 @@
     });
     showBubbleFile('');
     on(el.bubbleFileInput, 'change', onBubbleFilePicked);
-    on(el.bubbleSize, 'input', function () { el.bubbleSizeValue.textContent = el.bubbleSize.value + '%'; });
+    on(el.bubbleSize, 'input', function () { el.bubbleSizeValue.textContent = cameraSizeLabel(Number(el.bubbleSize.value)); renderCameraExample(); });
     on(el.setup, 'change', function () { savePrefs(); syncSetup(); });
     on(el.setup, 'submit', function (event) { event.preventDefault(); });
 
@@ -942,7 +962,7 @@
     Takes.bus.on('bubble:changed', function (layout) {
       var percent = String(Math.round(layout.scale * 100));
       if (el.bubbleColor.value !== layout.color || el.bubbleSize.value !== percent) {
-        el.bubbleColor.value = layout.color; el.bubbleSize.value = percent; el.bubbleSizeValue.textContent = percent + '%'; savePrefs();
+        el.bubbleColor.value = layout.color; el.bubbleSize.value = percent; el.bubbleSizeValue.textContent = cameraSizeLabel(Number(percent)); renderCameraExample(); savePrefs();
       }
     });
     on(el.importVideo, 'change', function () { importVideo(el.importVideo.files[0]); });

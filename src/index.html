@@ -134,8 +134,13 @@
         <div class="tk-field" id="tk-bubble-color-field">
           <label class="tk-label" for="tk-bubble-color">Camera border color</label>
           <input type="color" id="tk-bubble-color" value="#ffffff">
-          <label class="tk-label" for="tk-bubble-size">Camera size <output id="tk-bubble-size-value">22%</output></label>
-          <input class="tk-range" type="range" id="tk-bubble-size" min="10" max="50" step="1" value="22">
+          <label class="tk-label" for="tk-bubble-size">Camera size <output id="tk-bubble-size-value">Medium</output></label>
+          <input class="tk-range" type="range" id="tk-bubble-size" min="10" max="50" step="1" value="22" aria-describedby="tk-camera-example-note">
+          <div class="tk-camera-example" id="tk-camera-example" aria-label="Camera size and position example">
+            <div class="tk-example-screen" aria-hidden="true"><div class="tk-example-sidebar"></div><div class="tk-example-content"><span></span><span></span><span></span></div></div>
+            <div class="tk-example-camera" id="tk-example-camera" aria-hidden="true"><svg viewBox="0 0 64 64"><circle cx="32" cy="23" r="12"/><path d="M8 60c0-14 10-23 24-23s24 9 24 23z"/></svg></div>
+          </div>
+          <p class="tk-size-example-note" id="tk-camera-example-note">Size on an example screen. Move the slider to see the difference. Your camera is not on yet.</p>
         </div>
 
         <fieldset class="tk-fieldset tk-corner-group" id="tk-corners">
@@ -169,9 +174,9 @@
         <button type="button" class="tk-btn" id="tk-open-preview">Open floating preview</button>
         <div id="tk-live-preview" hidden><video id="tk-camera-preview" class="tk-camera-preview" muted autoplay playsinline aria-label="Live recording preview"></video></div>
         <button type="button" class="tk-record-btn" id="tk-record-btn" aria-describedby="tk-record-hint">
-          <svg class="tk-rings" viewBox="0 0 536 536" aria-hidden="true"><circle cx="268" cy="268" r="111"/><circle cx="268" cy="268" r="124"/><circle cx="268" cy="268" r="137"/><circle cx="268" cy="268" r="150"/><circle cx="268" cy="268" r="163"/><circle cx="268" cy="268" r="176"/><circle cx="268" cy="268" r="189"/></svg>
+          <svg class="tk-rings" viewBox="0 0 280 280" aria-hidden="true"><circle cx="140" cy="140" r="106"/><circle cx="140" cy="140" r="120"/><circle cx="140" cy="140" r="134"/></svg>
           <span class="tk-record-dot" aria-hidden="true"></span>
-          <span class="tk-record-label" id="tk-record-label">Record</span>
+          <span class="tk-record-label" id="tk-record-label">Start recording</span>
         </button>
         <p class="tk-record-hint" id="tk-record-hint">Your browser asks what to share. Recording starts after a 3-second countdown.</p>
         <p class="tk-record-hint" id="tk-record-live" role="status" hidden>Recording. Switch to what you want to show. Come back to this tab, or use your browser's Stop sharing bar, to finish.</p>

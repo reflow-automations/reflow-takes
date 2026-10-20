@@ -936,31 +936,33 @@ button { cursor: pointer; }
 .tk-hero-sub { color: var(--tk-muted); font-size: var(--tk-fs-md); text-align: center; }
 .tk-is-countdown .tk-hero, .tk-is-recording .tk-hero, .tk-is-paused .tk-hero, .tk-is-processing .tk-hero { display: none; }
 
-/* ============================================================ 4. The disc and its rings */
+/* ============================================================ 4. Recording control with depth */
 .tk-record-btn {
-  background: var(--tk-record); color: #131c2b;
-  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.35) inset, 0 14px 28px -16px rgba(0, 0, 0, 0.55);
+  width:188px; height:188px; padding:0; border-radius:50%; isolation:isolate;
+  background:radial-gradient(circle at 30% 22%, #35caa2 0%, #13a47c 42%, #087455 100%);
+  color:#fff;
+  border:1px solid rgba(255,255,255,0.28);
+  box-shadow:inset 0 2px 2px rgba(255,255,255,0.28), inset 0 -8px 18px rgba(4,48,36,0.24), 0 12px 28px -16px rgba(0,0,0,0.6);
+  margin:20px 0 76px;
 }
-.tk-record-btn::before { display: none; }
-.tk-record-btn::after { animation: none; }
-.tk-record-dot { background: #131c2b; box-shadow: 0 0 0 5px rgba(19, 28, 43, 0.15); }
-.tk-record-btn:hover { transform: scale(1.04); filter: brightness(1.1); }
-.tk-record-btn:active { transform: scale(0.96); filter: brightness(0.95); }
-
-/* Quiet rings around the recording action. */
-.tk-rings { position: absolute; inset: -170px; width: calc(100% + 340px); height: calc(100% + 340px); z-index: -1; pointer-events: none; overflow: visible; }
-.tk-rings circle { fill: none; stroke-width: 1.25; stroke-opacity: var(--o); animation: none; animation-delay: var(--d); }
-.tk-rings circle:nth-child(1) { stroke: var(--tk-accent); --o: 0.50; --d: 1.50s; }
-.tk-rings circle:nth-child(2) { stroke: color-mix(in srgb, var(--tk-accent) 50%, var(--tk-secondary)); --o: 0.44; --d: 1.25s; }
-.tk-rings circle:nth-child(3) { stroke: var(--tk-secondary); --o: 0.38; --d: 1.00s; }
-.tk-rings circle:nth-child(4) { stroke: color-mix(in srgb, var(--tk-secondary) 66%, var(--tk-focus)); --o: 0.32; --d: 0.75s; }
-.tk-rings circle:nth-child(5) { stroke: color-mix(in srgb, var(--tk-secondary) 33%, var(--tk-focus)); --o: 0.26; --d: 0.50s; }
-.tk-rings circle:nth-child(6) { stroke: var(--tk-focus); --o: 0.20; --d: 0.25s; }
-.tk-rings circle:nth-child(7) { stroke: var(--tk-focus); --o: 0.14; --d: 0s; }
-@keyframes tk-ring { 0%, 55%, 100% { stroke-opacity: var(--o); stroke-width: 1.25; } 22% { stroke-opacity: 0.95; stroke-width: 2; } }
-/* While a take is in progress the rings hold still and dim, so nothing competes with the recorder for the processor. */
-.tk-record-btn:disabled .tk-rings { opacity: 0.35; }
-.tk-record-btn:disabled .tk-rings circle { animation: none; }
+.tk-record-btn::before { display:none; }
+.tk-record-btn::after { display:none; }
+.tk-record-dot {
+  position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
+  width:30px; height:30px; background:#fff; border-radius:50%;
+  box-shadow:0 2px 5px rgba(0,0,0,0.18);
+}
+.tk-record-label {
+  position:absolute; top:calc(100% + 44px); left:50%; transform:translateX(-50%);
+  width:max-content; font-size:1.05rem; font-weight:650; letter-spacing:0; text-transform:none;
+  color:var(--tk-text);
+}
+.tk-record-btn:hover { transform:scale(1.025); filter:brightness(1.05); }
+.tk-record-btn:active { transform:scale(0.98); filter:brightness(0.98); }
+.tk-record-btn:focus-visible { border-radius:50%; outline-offset:8px; }
+.tk-rings { display:block; position:absolute; inset:-39px; width:calc(100% + 78px); height:calc(100% + 78px); z-index:-1; pointer-events:none; overflow:visible; }
+.tk-rings circle { fill:none; stroke:var(--tk-accent); stroke-width:1; stroke-opacity:0.22; animation:none; }
+.tk-rings circle:last-child { stroke:var(--tk-record); stroke-opacity:0.14; }
 
 /* ============================================================ 5. Buttons answer: lighter on hover, pressed in on click */
 .tk-btn { transition: background-color var(--tk-fast), border-color var(--tk-fast), color var(--tk-fast), transform var(--tk-fast), filter var(--tk-fast), box-shadow var(--tk-fast); }
@@ -1018,7 +1020,7 @@ button { cursor: pointer; }
 @media (max-width: 720px) {
   .tk-record-stage { gap: 96px; }
 }
-@media (max-width: 600px) {
+@media (max-width: 900px) {
   .tk-header { grid-template-columns: 1fr auto; }
   .tk-nav { grid-column: 1 / -1; grid-row: 2; justify-self: center; }
 }
@@ -1047,14 +1049,24 @@ button { cursor: pointer; }
 /* Brand hierarchy and accessible action labels. */
 .tk-label, .tk-legend { text-transform:none; letter-spacing:0; color:var(--tk-muted); }
 .tk-brand-name::after { background:var(--tk-record); }
-.tk-rings circle:nth-child(n+4) { display:none; }
-.tk-record-btn .tk-rings { opacity:0.6; }
 .tk-record-btn:focus-visible { outline-color:var(--tk-focus); }
 .tk-btn-danger { color:var(--tk-danger); }
 .tk-btn-danger:hover { background:#b3261e; border-color:#b3261e; color:#fff; }
 .tk-toast-error { border-color:var(--tk-danger); }
 .tk-is-recording .tk-recbar-dot, .tk-is-recording .tk-recbar { border-color:var(--tk-record); }
 @media (max-width:720px) { .tk-record-stage { gap:40px; } }
+
+/* Immediate size feedback before a recording starts. */
+.tk-camera-example { position:relative; width:100%; aspect-ratio:16/9; border:1px solid var(--tk-line-strong); border-radius:12px; overflow:hidden; background:var(--tk-bg); }
+.tk-example-screen { position:absolute; inset:8% 6%; display:grid; grid-template-columns:20% 1fr; gap:6%; opacity:0.55; }
+.tk-example-sidebar { border-radius:5px; background:var(--tk-line); }
+.tk-example-content { display:flex; flex-direction:column; gap:11%; padding-top:3%; }
+.tk-example-content span { display:block; height:10%; border-radius:3px; background:var(--tk-line); }
+.tk-example-content span:first-child { width:60%; background:var(--tk-muted); }
+.tk-example-content span:last-child { height:35%; background:var(--tk-surface-2); }
+.tk-example-camera { position:absolute; border:2px solid #fff; background:linear-gradient(145deg,#249f85,#0b6450); display:grid; place-items:center; overflow:hidden; box-shadow:0 3px 9px rgba(0,0,0,0.22); }
+.tk-example-camera svg { width:80%; height:80%; fill:#e8f5f0; }
+.tk-size-example-note { font-size:0.78rem; color:var(--tk-muted); line-height:1.45; text-align:left; }
 </style>
 </head>
 <body class="tk-app" id="tk-app">
@@ -1184,8 +1196,13 @@ button { cursor: pointer; }
         <div class="tk-field" id="tk-bubble-color-field">
           <label class="tk-label" for="tk-bubble-color">Camera border color</label>
           <input type="color" id="tk-bubble-color" value="#ffffff">
-          <label class="tk-label" for="tk-bubble-size">Camera size <output id="tk-bubble-size-value">22%</output></label>
-          <input class="tk-range" type="range" id="tk-bubble-size" min="10" max="50" step="1" value="22">
+          <label class="tk-label" for="tk-bubble-size">Camera size <output id="tk-bubble-size-value">Medium</output></label>
+          <input class="tk-range" type="range" id="tk-bubble-size" min="10" max="50" step="1" value="22" aria-describedby="tk-camera-example-note">
+          <div class="tk-camera-example" id="tk-camera-example" aria-label="Camera size and position example">
+            <div class="tk-example-screen" aria-hidden="true"><div class="tk-example-sidebar"></div><div class="tk-example-content"><span></span><span></span><span></span></div></div>
+            <div class="tk-example-camera" id="tk-example-camera" aria-hidden="true"><svg viewBox="0 0 64 64"><circle cx="32" cy="23" r="12"/><path d="M8 60c0-14 10-23 24-23s24 9 24 23z"/></svg></div>
+          </div>
+          <p class="tk-size-example-note" id="tk-camera-example-note">Size on an example screen. Move the slider to see the difference. Your camera is not on yet.</p>
         </div>
 
         <fieldset class="tk-fieldset tk-corner-group" id="tk-corners">
@@ -1219,9 +1236,9 @@ button { cursor: pointer; }
         <button type="button" class="tk-btn" id="tk-open-preview">Open floating preview</button>
         <div id="tk-live-preview" hidden><video id="tk-camera-preview" class="tk-camera-preview" muted autoplay playsinline aria-label="Live recording preview"></video></div>
         <button type="button" class="tk-record-btn" id="tk-record-btn" aria-describedby="tk-record-hint">
-          <svg class="tk-rings" viewBox="0 0 536 536" aria-hidden="true"><circle cx="268" cy="268" r="111"/><circle cx="268" cy="268" r="124"/><circle cx="268" cy="268" r="137"/><circle cx="268" cy="268" r="150"/><circle cx="268" cy="268" r="163"/><circle cx="268" cy="268" r="176"/><circle cx="268" cy="268" r="189"/></svg>
+          <svg class="tk-rings" viewBox="0 0 280 280" aria-hidden="true"><circle cx="140" cy="140" r="106"/><circle cx="140" cy="140" r="120"/><circle cx="140" cy="140" r="134"/></svg>
           <span class="tk-record-dot" aria-hidden="true"></span>
-          <span class="tk-record-label" id="tk-record-label">Record</span>
+          <span class="tk-record-label" id="tk-record-label">Start recording</span>
         </button>
         <p class="tk-record-hint" id="tk-record-hint">Your browser asks what to share. Recording starts after a 3-second countdown.</p>
         <p class="tk-record-hint" id="tk-record-live" role="status" hidden>Recording. Switch to what you want to show. Come back to this tab, or use your browser's Stop sharing bar, to finish.</p>
@@ -6990,6 +7007,25 @@ button { cursor: pointer; }
   }
 
   /** Bring the setup panel, its note and the Record button in line with what is chosen and what is happening. */
+  function cameraSizeLabel(percent) {
+    return percent < 18 ? 'Small' : percent < 29 ? 'Medium' : percent < 41 ? 'Large' : 'Extra large';
+  }
+
+  function renderCameraExample() {
+    var example = byId('tk-example-camera');
+    if (!example) return;
+    var setup = readSetup();
+    var box = Takes.compositor.bubbleBox(640,360,setup.corner,360*setup.scale,setup.shape);
+    example.style.left = box.x/640*100 + '%'; example.style.top = box.y/360*100 + '%';
+    example.style.width = (box.w || box.d)/640*100 + '%'; example.style.height = (box.h || box.d)/360*100 + '%';
+    example.style.borderRadius = setup.shape === 'rectangle' ? '8px' : '50%';
+    example.style.borderColor = setup.color;
+    el.bubbleSize.setAttribute('aria-valuetext',cameraSizeLabel(Number(el.bubbleSize.value)) + ', ' + el.bubbleSize.value + ' percent of image height');
+    byId('tk-camera-example-note').textContent = starting || recState !== 'idle'
+      ? 'Size on an example screen. The live preview shows your actual recording.'
+      : 'Size on an example screen. Move the slider to see the difference. Your camera is not on yet.';
+  }
+
   function syncSetup() {
     var s = readSetup();
     var busy = starting || recState !== 'idle';
@@ -7000,7 +7036,8 @@ button { cursor: pointer; }
     setHidden(el.cameraField, !s.camera || s.bubbleFromFile); // a video file needs no camera
     setHidden(el.micField, !s.mic);
     setHidden(el.corners, !(s.screen && s.camera));
-    el.bubbleSizeValue.textContent = el.bubbleSize.value + '%';
+    el.bubbleSizeValue.textContent = cameraSizeLabel(Number(el.bubbleSize.value));
+    renderCameraExample();
     setHidden(el.bubbleColorField, !(s.screen && s.camera));
     setHidden(el.bubbleShape, !(s.screen && s.camera)); // the shape matters exactly when the corner does
 
@@ -7111,7 +7148,7 @@ button { cursor: pointer; }
     });
     showBubbleFile('');
     on(el.bubbleFileInput, 'change', onBubbleFilePicked);
-    on(el.bubbleSize, 'input', function () { el.bubbleSizeValue.textContent = el.bubbleSize.value + '%'; });
+    on(el.bubbleSize, 'input', function () { el.bubbleSizeValue.textContent = cameraSizeLabel(Number(el.bubbleSize.value)); renderCameraExample(); });
     on(el.setup, 'change', function () { savePrefs(); syncSetup(); });
     on(el.setup, 'submit', function (event) { event.preventDefault(); });
 
@@ -7358,7 +7395,7 @@ button { cursor: pointer; }
     Takes.bus.on('bubble:changed', function (layout) {
       var percent = String(Math.round(layout.scale * 100));
       if (el.bubbleColor.value !== layout.color || el.bubbleSize.value !== percent) {
-        el.bubbleColor.value = layout.color; el.bubbleSize.value = percent; el.bubbleSizeValue.textContent = percent + '%'; savePrefs();
+        el.bubbleColor.value = layout.color; el.bubbleSize.value = percent; el.bubbleSizeValue.textContent = cameraSizeLabel(Number(percent)); renderCameraExample(); savePrefs();
       }
     });
     on(el.importVideo, 'change', function () { importVideo(el.importVideo.files[0]); });
