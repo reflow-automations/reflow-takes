@@ -1,0 +1,4 @@
+* text=auto eol=lf
+*.woff2 -text
+*.png -text
+vendor/** -text
